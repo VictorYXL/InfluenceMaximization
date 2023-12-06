@@ -13,7 +13,7 @@ training_dataset = InfluenceDataset(data_file, "training_data")
 evaluation_dataset = InfluenceDataset(data_file, "evaluation_data")
 model = LTNet(len(training_dataset.graph.nodes))
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu') 
-trainer = Trainer(model, training_dataset, evaluation_dataset, learning_rate=1e-2, output_dir=exp_dir, epochs=1000, batch_size=8)
+trainer = Trainer(model, training_dataset, evaluation_dataset, device=device, learning_rate=1e-2, output_dir=exp_dir, epochs=1000, batch_size=8)
 
 print(f"Device: {device}")
 print(f"Dataset: {data_file}")

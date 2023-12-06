@@ -46,7 +46,6 @@ def generate_dataset(graph_path: str, num_simulations: Dict[str, int], file_path
     for mode, num in num_simulations.items():
         data[mode] = []
         for index in range(num):
-            print(index)
             # Randomly select seed nodes
             seed_size = int(random.random() * seed_ratio * 2 * len(graph.nodes))
             seed_nodes = random.sample(all_nodes, seed_size)

@@ -1,4 +1,5 @@
 import os
+import datetime
 import torch
 import torch.optim as optim
 from torch import nn
@@ -37,6 +38,7 @@ class Trainer:
                 total_loss += loss.item()
 
             avg_loss = total_loss / len(dataloader)
+            print(datetime.datetime.now())
             print(f"Epoch {epoch+1}/{self.epochs}, Loss: {avg_loss:.4f}")
             current_accuracy, _ = self.evaluate()
             if current_accuracy < best_accuracy:
