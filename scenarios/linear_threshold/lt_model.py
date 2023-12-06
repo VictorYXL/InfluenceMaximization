@@ -8,9 +8,8 @@ class LTNet(nn.Module):
         super(LTNet, self).__init__()
         # Define a fully connected layer with bias
         self.fc = nn.Linear(node_num, node_num, bias=True)
-        
+       
     def forward(self, x):
         # Pass the input through the fully connected layer, then apply ReLU
         x = self.fc(x)
-        x = F.relu(x)
         return x

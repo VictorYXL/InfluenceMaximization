@@ -42,7 +42,7 @@ def generate_dataset(graph_path: str, num_simulations: Dict[str, int], file_path
         "seed_ratio": seed_ratio
     }
     all_nodes = list(graph.nodes())
-    
+   
     for mode, num in num_simulations.items():
         data[mode] = []
         for index in range(num):
@@ -63,15 +63,15 @@ def generate_dataset(graph_path: str, num_simulations: Dict[str, int], file_path
                 'input': input_vector,
                 'label': label_vector
             })
-    
+   
     # Save the data to a file
     with open(file_path, 'w') as file:
         json.dump(data, file, indent=4)
 
 
 if __name__ == "__main__":
-    graph_path = os.path.join("data", "example", "graph")
-    num_simulations = {"training_data": 100, "evaluation_data": 30}
-    output_path = os.path.join("data", "example", "dataset", "dataset_100_30.json")
+    graph_path = os.path.join("data", "facebook", "graph")
+    num_simulations = {"training_data": 10000, "evaluation_data": 3000}
+    output_path = os.path.join("data", "facebook", "dataset", "dataset_10k_3k.json")
     simulator_function = lt_simulator
-    generate_dataset(graph_path, num_simulations, output_path, simulator_function, 0.5)
+    generate_dataset(graph_path, num_simulations, output_path, simulator_function, 0.05)

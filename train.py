@@ -4,16 +4,18 @@ from dataset import InfluenceDataset
 from scenarios.linear_threshold.lt_model import LTNet
 from trainer import Trainer
 
+exp_name = "exp_1"
+exp_dir = os.path.join("output", exp_name)
+os.makedirs(exp_dir, exist_ok=True)
 
-data_file = os.path.join("data", "example", "dataset", "dataset_100_30.json")
+data_file = os.path.join("data", "facebook", "dataset", "dataset_10k_3k.json")
 training_dataset = InfluenceDataset(data_file, "training_data")
 evaluation_dataset = InfluenceDataset(data_file, "evaluation_data")
 model = LTNet(len(training_dataset.graph.nodes))
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  
-trainer = Trainer(model, training_dataset, evaluation_dataset, learning_rate=1e-3)
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu') 
+trainer = Trainer(model, training_dataset, evaluation_dataset, learning_rate=1e-2, output_dir=exp_dir, epochs=1000, batch_size=8)
 
-trainer.train(epochs=1000, batch_size=2)
+print(f"Device: {device}")
+print(f"Dataset: {data_file}")
 
-trainer.save_model(os.path.join("data", "example", "model", "model_100.pth"))
-print(list(model.parameters())[0])
-print(list(model.parameters())[1])
+trainer.train()

@@ -14,7 +14,7 @@ class InfluenceDataset(Dataset):
         self.graph = load_graph_from_tsv(json_data["graph_path"])
         self.influence_function = eval(json_data["influence_function"])
         self._data = json_data[mode]
-    
+   
     def __len__(self):
         # Return the number of samples in the dataset
         return len(self._data)
@@ -22,7 +22,7 @@ class InfluenceDataset(Dataset):
     def __getitem__(self, idx):
         # Retrieve the sample at the specified index
         sample = self._data[idx]
-        
+       
         # Convert the input and label lists to PyTorch tensors
         input_tensor = torch.tensor(sample['input'], dtype=torch.float32)
         label_tensor = torch.tensor(sample['label'], dtype=torch.float32)
