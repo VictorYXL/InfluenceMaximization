@@ -2,17 +2,8 @@ import os
 import networkx as nx
 import pandas as pd
 
-def load_graph_from_tsv(graph_dir: str) -> nx.DiGraph:
-    """Load a directed graph with attributes from TSV files in the specified directory.
-
-    Args:
-        graph_dir (str): The directory containing 'node.tsv' and 'edge.tsv' files.
-
-    Returns:
-        nx.DiGraph: A directed graph with nodes and edges loaded from the TSV files, including their attributes.
-    """
-    node_file = os.path.join(graph_dir, "node.tsv")
-    edge_file = os.path.join(graph_dir, "edge.tsv")
+def load_graph_from_tsv(node_file: str, edge_file: str) -> nx.DiGraph:
+    """Load a directed graph with attributes from TSV files in the specified directory."""
 
     # Read the node file using pandas
     node_df = pd.read_csv(node_file, sep='\t')

@@ -11,7 +11,7 @@ class InfluenceDataset(Dataset):
         """Load the dataset from the JSON file"""
         with open(dataset_path, 'r') as file:
             json_data = json.load(file)
-        self.graph = load_graph_from_tsv(json_data["graph_path"])
+        self.graph = load_graph_from_tsv(json_data["node_file"], json_data["edge_file"])
         self.influence_function = eval(json_data["influence_function"])
         self._data = json_data[mode]
    

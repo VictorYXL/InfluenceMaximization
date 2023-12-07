@@ -77,7 +77,7 @@ class Trainer:
                 print(f"Validation Accuracy (Overall): {overall_accuracy:.4f}")
                 print(f"Validation Accuracy (Class 0 - Not Influenced): {class_accuracies[0]:.4f}")
                 print(f"Validation Accuracy (Class 1 - Influenced): {class_accuracies[1]:.4f}")
-                return overall_accuracy, class_accuracies
+                return accuracy, class_accuracies
 
     def save_model(self, file_path):
         """Save the model parameters to the specified file."""
