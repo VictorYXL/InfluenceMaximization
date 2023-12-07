@@ -19,11 +19,12 @@ class Trainer:
         self.epochs = epochs
         self.batch_size = batch_size
         self.model_path = os.path.join(output_dir, "best_model.pth")
+        self.model.to(self.device)
 
     def train(self):
         dataloader = DataLoader(self.training_dataset, batch_size=self.batch_size, shuffle=True)
         self.model.train()  # Set the model to training mode
-        best_accuracy = 10000
+        best_accuracy = 0
 
         for epoch in range(self.epochs):
             total_loss = 0.0
@@ -41,7 +42,7 @@ class Trainer:
             print(datetime.datetime.now())
             print(f"Epoch {epoch+1}/{self.epochs}, Loss: {avg_loss:.4f}")
             current_accuracy, _ = self.evaluate()
-            if current_accuracy < best_accuracy:
+            if current_accuracy > best_accuracy:
                 best_accuracy = current_accuracy
                 self.save_model(self.model_path)
 
