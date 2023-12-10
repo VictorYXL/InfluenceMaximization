@@ -32,7 +32,6 @@ def generate_edge_weight(origin_file_path: str, edge_file_path: str, lower_bound
         for dst_node in edges_dict:
             weights = list(edges_dict[dst_node].values())
             if sum(weights) >= 1:
-                s += 1
                 weights = softmax(weights)
                 
             for src_node, weight in zip(edges_dict[dst_node].keys(), weights):
@@ -45,7 +44,7 @@ def generate_edge_weight(origin_file_path: str, edge_file_path: str, lower_bound
             for src_node, weight in src_nodes.items():
                 edge_file.write(f"{src_node}\t{dst_node}\t{weight}\n")
 
-def generate_dataset(node_file: str, edge_file: str, num_simulations: Dict[str, int], file_path: str, influence_function: callable, seed_ratio: float):
+def generate_dataset(node_file: str, edge_file: str, num_simulations: Dict[str, int], file_path: str, influence_function: callable, seed_ratio: float, run_times: int=1):
     graph = load_graph_from_tsv(node_file, edge_file)
     data = {
         "node_file": node_file,
@@ -62,13 +61,15 @@ def generate_dataset(node_file: str, edge_file: str, num_simulations: Dict[str, 
             # Randomly select seed nodes
             seed_size = int(random.random() * seed_ratio * 2 * len(graph.nodes))
             seed_nodes = random.sample(all_nodes, seed_size)
-
-            # Run the simulation
-            influenced_nodes = influence_function(graph, seed_nodes)
-
             # Create input and label vectors
             input_vector = [1 if node in seed_nodes else 0 for node in all_nodes]
-            label_vector = [1 if node in influenced_nodes else 0 for node in all_nodes]
+            label_vector = [0.0] * len(all_nodes)
+            for _ in range(run_times):
+                # Run the simulation
+                influenced_nodes = influence_function(graph, seed_nodes)
+                for index, node in enumerate(all_nodes):
+                    if node in influenced_nodes:
+                        label_vector[index] += 1 / run_times
 
             # Store the simulation data
             data[mode].append({
@@ -85,7 +86,10 @@ if __name__ == "__main__":
     graph_path = os.path.join("data", "facebook", "graph")
     node_file = os.path.join(graph_path, "node.tsv")
     edge_file = os.path.join(graph_path, "edge_norm.tsv")
-    num_simulations = {"training_data": 10000, "evaluation_data": 3000}
-    output_path = os.path.join("data", "facebook", "dataset", "dataset_10k_3k_0.1.json")
-    simulator_function = lt_simulator
-    generate_dataset(node_file, edge_file, num_simulations, output_path, simulator_function, 0.1)
+    num_simulations = {"training_data": 30000, "evaluation_data": 10000}
+    output_path = os.path.join("data", "facebook", "dataset", "dataset_30k_15k_0.1.json")
+    simulator_function = ic_simulator
+    # generate_edge_weight(os.path.join("data", "facebook", "graph", "facebook_combined.txt"), os.path.join("data", "facebook", "graph", "edge_highest_weigh.txt"), 0, 0.4, True)
+    generate_dataset(node_file, os.path.join(graph_path, "edge_norm.tsv"), num_simulations, os.path.join("data", "facebook", "dataset", "ic_30k_10k_0.1.json"), simulator_function, 0.1, 1)
+    generate_dataset(node_file, os.path.join(graph_path, "edge_higher_weight.tsv"), num_simulations, os.path.join("data", "facebook", "dataset", "ic_higher_30k_10k_0.1.json"), simulator_function, 0.1)
+    generate_dataset(node_file, os.path.join(graph_path, "edge_highest_weight.tsv"), num_simulations, os.path.join("data", "facebook", "dataset", "ic_highest_30k_10k_0.1.json"), simulator_function, 0.1)

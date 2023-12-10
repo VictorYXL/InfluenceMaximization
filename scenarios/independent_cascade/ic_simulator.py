@@ -21,9 +21,7 @@ def ic_simulator(G: nx.Graph, seed_nodes: List[int]):
                 influence_prob = G[node][neighbor]["weight"]
                 if random.random() < influence_prob:
                     next_influenced_nodes.add(neighbor)
-                    influenced_nodes.add(neighbor)
 
     # Update the sets for the next iteration
-    newly_influenced_nodes = next_influenced_nodes - influenced_nodes
-    influenced_nodes |= newly_influenced_nodes
-    return newly_influenced_nodes
+    influenced_nodes |= next_influenced_nodes
+    return influenced_nodes

@@ -26,7 +26,6 @@ def lt_simulator(G: nx.Graph, seed_nodes: List[int]):
                 next_influenced_nodes.add(node)
 
         # Update the sets for the next iteration
-        newly_influenced_nodes = next_influenced_nodes - influenced_nodes
-        influenced_nodes |= newly_influenced_nodes
+        influenced_nodes |= next_influenced_nodes
 
     return influenced_nodes
